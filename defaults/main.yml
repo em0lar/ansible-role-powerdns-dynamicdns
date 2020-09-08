@@ -1,2 +1,8 @@
 ---
-# defaults file for roles/powerdns-dynamicdns
+powerdns_dynamicdns_activate_tsig: true
+powerdns_dynamicdns_tsig_key_algorithm: "hmac-sha512"
+
+dyndns_get_ipv4_command: "curl -4 -f -s --connect-timeout 20 -S http://ipv4.xnet.space 2>/dev/null"
+dyndns_get_ipv6_command: "curl -6 -f -s --connect-timeout 20 -S http://ipv6.xnet.space 2>/dev/null"
+
+powerdns_dynamicdns_soa_record_min_ttl: "60"

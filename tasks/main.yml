@@ -1,2 +1,32 @@
 ---
-# tasks file for roles/powerdns-dynamicdns
+- import_tasks: remote_server_database.yml
+  delegate_to: "{{ powerdns_dynamicdns_ansible_server }}"
+
+- name: Create TSIG-Key file
+  copy:
+    content: |
+      key "{{ powerdns_dynamicdns_tsig_key_name }}" {
+       algorithm {{ sqlite3_command_tsig_key_algorithm.stdout }};
+       secret "{{ sqlite3_command_tsig_key_secret.stdout }}";
+      };
+    mode: 0400
+    dest: "/root/dyndns_tsig_key"
+  when: powerdns_dynamicdns_activate_tsig
+
+- name: Install dnsutils on client
+  apt:
+    name: "dnsutils"
+    state: present
+
+- name: Template create_nsupdate.sh
+  template:
+    src: "create_nsupdate.sh"
+    dest: "/root/create_nsupdate.sh"
+    mode: "+x"
+
+- name: Insert DynDNS-script-cronjob
+  cron:
+    name: "powerdns DynDNS"
+    minute: "*"
+    hour: "*"
+    job: 'cd /root && ./create_nsupdate.sh'

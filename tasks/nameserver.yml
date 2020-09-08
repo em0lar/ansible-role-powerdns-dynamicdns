@@ -1,0 +1,9 @@
+---
+- name: Check if nameserver '{{ item }}' is already in zone
+  command: "pdnsutil list-zone dyn.labcode.de"
+  changed_when: false
+  register: "pdnsutil_command_list_zone"
+
+- name: Add nameserver '{{ item }}' to zone
+  command: "pdnsutil add-record {{ powerdns_dynamicdns_zone }} @ NS 3600 {{ item }}"
+  when: not item in pdnsutil_command_list_zone.stdout
