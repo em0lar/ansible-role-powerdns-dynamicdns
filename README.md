@@ -28,6 +28,12 @@ It also needs the sqlite3 database configured as backend.
 | `powerdns_dynamicdns_tsig_key_algorithm` | Algorithm used for TSIG signing | `hmac-sha512` | Must be supported by powerdns and nsupdate
 | `powerdns_dynamicdns_tsig_key_name` | Name of the TSIG signature name (required when TSIG signature is enabled) | | 
 
+### Domain Metadata
+
+| Variable Name | Function | Default value | Comment |
+| ------------- | -------- | ------------- | ------- |
+| `powerdns_dynamicdns_domainmetadata` | Add metadata to the zome | `[]` | `[{'key': 'ALLOW-DNSUPDATE-FROM', 'value': '0.0.0.0/0'}]`
+
 ### SOA and nameserver records
 
 | Variable Name | Function | Default value | Comment |

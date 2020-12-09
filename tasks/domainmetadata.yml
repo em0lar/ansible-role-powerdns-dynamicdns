@@ -1,0 +1,9 @@
+---
+- name: Check if metadata entry is in database
+  command: "sqlite3 {{ powerdns_dynamicdns_database_file }} \"SELECT * from domainmetadata WHERE domain_id='{{ sqlite3_command_domain_id.stdout }}' AND kind='{{ item.key }}' AND content='{{ item.value }}'\""
+  changed_when: false
+  register: sqlite3_domainmetadata
+
+- name: Add metadata entry to database
+  command: "sqlite3 {{ powerdns_dynamicdns_database_file }} \"INSERT INTO domainmetadata (domain_id, kind, content) VALUES ({{ sqlite3_command_domain_id.stdout }}, '{{ item.key }}', '{{ item.value }}');\""
+  when: sqlite3_domainmetadata.stdout | length == 0
