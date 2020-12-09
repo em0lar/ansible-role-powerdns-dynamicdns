@@ -4,6 +4,12 @@
   register: stat_version_file
 
 - block:
+  - name: Make sure pdns-user owns database directory
+    file:
+      path: "{{ powerdns_dynamicdns_database_file | dirname }}"
+      owner: "pdns"
+      state: directory
+
   - name: Upload database schema if sqlite3 database is not existing
     copy:
       src: "schema.sql"

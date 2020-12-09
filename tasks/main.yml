@@ -17,6 +17,7 @@
   apt:
     name: "dnsutils"
     state: present
+  when: ansible_os_family == 'Debian'
 
 - name: Template create_nsupdate.sh
   template:

@@ -1,6 +1,6 @@
 ---
 - name: Check if nameserver '{{ item }}' is already in zone
-  command: "pdnsutil list-zone dyn.labcode.de"
+  command: "pdnsutil list-zone {{ powerdns_dynamicdns_zone }}"
   changed_when: false
   register: "pdnsutil_command_list_zone"
 

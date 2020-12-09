@@ -1,9 +1,9 @@
-#!/bin/bash
+#!/bin/sh
 ipv4_address=$({{ dyndns_get_ipv4_command }})
 ipv6_address=$({{ dyndns_get_ipv6_command }})
 
-old_ipv4_address=$(cat dyndns_nsupdate.txt 2>/dev/null | grep -Po '(?<=A )(?:[0-9]{1,3}\.){3}[0-9]{1,3}')
-old_ipv6_address=$(cat dyndns_nsupdate.txt 2>/dev/null | grep -Po '(?<=AAAA )([a-f0-9:]*)')
+old_ipv4_address=$(cat dyndns_nsupdate.txt 2>/dev/null | grep -Eo '([0-9]{1,3}[\.]){3}[0-9]{1,3}')
+old_ipv6_address=$(cat dyndns_nsupdate.txt 2>/dev/null | grep -o 'AAAA [a-f0-9:]*' | grep -o '[a-f0-9:]*')
 
 if ! [ -f dyndns_nsupdate.txt ] || [ "$old_ipv4_address" != "$ipv4_address" ] || [ "$old_ipv6_address" != "$ipv6_address" ]; then
   rm dyndns_nsupdate.txt 2>/dev/null
