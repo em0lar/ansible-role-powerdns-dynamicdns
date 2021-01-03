@@ -62,15 +62,8 @@
       changed_when: false
       register: sqlite3_command_tsig_key_algorithm
 
-    - name: Check if TSIG key is already in domain metadata table
-      command: "sqlite3 {{ powerdns_dynamicdns_database_file }} \"SELECT * from domainmetadata WHERE domain_id='{{ sqlite3_command_domain_id.stdout }}' AND kind='TSIG-ALLOW-DNSUPDATE' AND content='{{ powerdns_dynamicdns_tsig_key_name }}'\""
-      changed_when: false
-      register: sqlite3_command_domainmetadata_tsig_key_check
-
-    - name: Add TSIG key to domain metadata
-      command: "sqlite3 {{ powerdns_dynamicdns_database_file }} \"INSERT INTO domainmetadata (domain_id, kind, content) VALUES ({{ sqlite3_command_domain_id.stdout }}, 'TSIG-ALLOW-DNSUPDATE', '{{ powerdns_dynamicdns_tsig_key_name }}');\""
-      when: sqlite3_command_domainmetadata_tsig_key_check.stdout | length == 0
-  when: powerdns_dynamicdns_activate_tsig
+    - set_fact:
+        powerdns_dynamicdns_domainmetadata: "{{ powerdns_dynamicdns_domainmetadata + [{'key': 'TSIG-ALLOW-DNSUPDATE', 'value': powerdns_dynamicdns_tsig_key_name}] }}"
 
 - include_tasks: domainmetadata.yml
   loop: "{{ powerdns_dynamicdns_domainmetadata }}"

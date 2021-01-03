@@ -1,4 +1,5 @@
 galaxy_info:
+  role_name: powerdns-dynamicdns
   author: em0lar
   description: A ansible role to run dyndns with powerdns
 
